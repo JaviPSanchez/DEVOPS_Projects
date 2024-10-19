@@ -14,6 +14,6 @@
 - name: vps.javips.digital
   ansible.builtin.lineinfile:
     path: /etc/hosts
-    line: 89.117.37.12 vps.javips.digital vps
+    line: publid_ip vps.javips.digital vps
     state: present
   become: yes
