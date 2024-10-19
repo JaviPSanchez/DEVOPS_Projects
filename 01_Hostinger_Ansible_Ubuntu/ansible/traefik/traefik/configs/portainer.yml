@@ -1,0 +1,24 @@
+# Si no queremos que aparezca en las HTTP routes dejar este archivo vacio!
+http:
+  routers:
+    portainer:
+      rule: Host(`portainer.javips.digital`)
+      tls:
+        certresolver: letsencrypt
+      service: portainer
+      entryPoints:
+        - https
+      middlewares:
+        - portainer-allowlist
+
+  middlewares:
+    portainer-allowlist:
+      ipallowlist:
+        sourceRange:
+          - "83.193.185.145"
+
+  services:
+    portainer:
+      loadBalancer:
+        servers:
+          - url: http://portainer:9000

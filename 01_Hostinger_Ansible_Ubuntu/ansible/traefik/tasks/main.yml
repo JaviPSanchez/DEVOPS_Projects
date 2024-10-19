@@ -1,0 +1,35 @@
+- name: Ensure the /root/services directory exists
+  ansible.builtin.file:
+    path: /root/services/
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+  become: yes
+
+- name: Copy the traefik directory to /root/services
+  ansible.builtin.copy:
+    src: traefik/
+    dest: /root/services/traefik/
+    owner: root
+    group: root
+    mode: "0700"
+  become: yes
+
+- name: Create Docker network 'web'
+  community.docker.docker_network:
+    name: web
+  become: yes
+
+- name: Ensure acme.json file exists with correct permissions
+  ansible.builtin.file:
+    path: /root/services/traefik/acme.json
+    state: touch
+    owner: root
+    group: root
+    mode: "0600"
+  become: yes
+
+- name: run traefik
+  ansible.builtin.shell: "cd /root/services/traefik && docker-compose down && docker-compose up -d"
+  become: yes

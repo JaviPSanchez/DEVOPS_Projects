@@ -1,0 +1,55 @@
+- name: install packages
+  ansible.builtin.apt:
+    update_cache: yes # equivalent to 'apt update'
+    name:
+      - build-essential # equivalent to base-devel on Arch Linux, "group" - set of packages used for compiling
+      - bat # 'cat' replacement written in rust
+      - fd-find # 'find' replacement written in rust
+      - fzf # a command line fuzzy finder
+      - git # scm
+      - htop # interactive system monitor
+      - iotop # disk and IO monitoring
+      - lm-sensors # provides tools and drivers for monitoring temperatures, voltage, etc.
+      - man-db # manual pages: https://wiki.archlinux.org/title/Man_page
+      - manpages # manual pages: https://wiki.archlinux.org/title/Man_page
+      - p7zip-full # command line port of 7-Zip
+      - plocate # unix tool for finding files quickly
+      - ripgrep # grep replacement writte in rust
+      - smartmontools # provides disk health status
+      - sudo # run commands as root or another user
+      - zsh # unix shell, alternative to bash
+    state: present
+  become: yes
+
+- name: ensure plocate-updatedb.timer is started and enabled at boot
+  ansible.builtin.systemd:
+    name: plocate-updatedb.timer
+    state: started
+    enabled: yes
+  become: yes
+
+- name: symlink vi
+  ansible.builtin.file:
+    src: /usr/bin/vim
+    dest: /usr/bin/vi
+    state: link
+  become: yes
+
+- name: scripts directory
+  ansible.builtin.file:
+    path: /root/scripts
+    state: directory
+    owner: root
+    group: root
+    mode: "755"
+  become: yes
+
+- name: update pacman mirrors script
+  ansible.builtin.copy:
+    src: files/pacman-new-mirrorlist.sh
+    dest: /root/scripts/pacman-new-mirrorlist.sh
+    owner: root
+    group: root
+    mode: "700"
+  become: yes
+  when: ansible_facts['os_family'] == "Archlinux" # Ubuntu does not need

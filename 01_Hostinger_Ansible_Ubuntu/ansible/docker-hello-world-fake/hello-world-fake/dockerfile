@@ -1,0 +1,10 @@
+FROM python:3.9
+
+COPY requirements.txt /tmp/
+
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --requirement /tmp/requirements.txt
+
+COPY ./src/hello-world-fake.py /src/hello-world-fake.py
+
+ENTRYPOINT ["python","./src/hello-world-fake.py"]

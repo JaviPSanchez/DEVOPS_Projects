@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  hello-world:
+    container_name: hello-world
+    build: .
+    image: hello-world
+    volumes:
+      - ./src:/src
+    restart: unless-stopped

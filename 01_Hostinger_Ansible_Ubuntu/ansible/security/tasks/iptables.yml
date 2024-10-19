@@ -1,0 +1,25 @@
+- name: Ensure iptables-persistent is installed
+  ansible.builtin.apt:
+    name: iptables-persistent
+    state: present
+  become: yes
+
+- name: Ensure netfilter-persistent is started and enabled at boot
+  ansible.builtin.systemd:
+    name: netfilter-persistent
+    state: started
+    enabled: yes
+  become: yes
+
+- name: Copy iptables rules (IPv4)
+  ansible.builtin.copy:
+    src: iptables.rules
+    dest: /etc/iptables/rules.v4
+    owner: root
+    group: root
+    mode: "644"
+    backup: yes
+  notify:
+    - restart netfilter-persistent
+    - restart docker
+  become: yes

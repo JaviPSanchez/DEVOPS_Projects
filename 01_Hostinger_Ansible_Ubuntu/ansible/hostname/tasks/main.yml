@@ -1,0 +1,19 @@
+- name: set hostname
+  ansible.builtin.hostname:
+    name: vps.javips.digital
+    use: systemd
+  become: yes # Ensures the task is executed with elevated privileges, as modifying /etc/hosts typically requires root access.
+
+- name: localhost
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: 127.0.0.1 localhost.localdomain localhost
+    state: present #  Ensures the line is present; if it's not already there, it will be added
+  become: yes
+
+- name: vps.javips.digital
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: 89.117.37.12 vps.javips.digital vps
+    state: present
+  become: yes

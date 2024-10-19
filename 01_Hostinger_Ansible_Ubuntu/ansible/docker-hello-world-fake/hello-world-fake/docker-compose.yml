@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  hello-world-fake:
+    container_name: hello-world-fake
+    build: .
+    image: hello-world-fake # Explicitly specify the image name
+    volumes:
+      - ./src:/src
+    restart: unless-stopped

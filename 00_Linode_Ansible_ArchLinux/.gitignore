@@ -1,0 +1,7 @@
+ansible/**/notes.sh
+ansible/**/.env
+ansible/**/*.env-lxc-backups
+ansible/**/.my.conf
+ansible/**/*.ini
+notes.sh
+.vault_password

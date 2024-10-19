@@ -1,0 +1,39 @@
+services:
+  portainer:
+    container_name: ${container_name}
+    hostname: ${hostname}
+    image: ${docker_image}:${docker_image_tag}
+    restart: unless-stopped
+    networks:
+      - web
+    ports:
+      - "${loopback_ip}:53:53/tcp"
+      - "${loopback_ip}:53:53/udp"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    environment:
+      ServerIP: ${server_ip}
+      VIRTUAL_HOST: ${hostname}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+      - "traefik.http.routers.${service}.rule=Host(`${hostname}`)"
+      - "traefik.http.routers.${service}.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.${service}.entrypoints=https"
+      - "traefik.http.services.${service}.loadbalancer.server.port=9008"
+      - "traefik.http.routers.${service}.middlewares=${service}-allowlist"
+      - "traefik.http.middlewares.${service}-allowlist.ipallowlist.sourcerange=${ip_allowlist}"
+
+volumes:
+  portainer_data: # Declare the portainer_data volume here
+    driver: local # Optional: specify the driver, 'local' is the default
+
+networks:
+  web:
+    external: true

@@ -1,0 +1,14 @@
+- name: set hostname
+  ansible.builtin.hostname:
+    name: vps.javips.digital
+    use: systemd
+
+- name: localhost
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: 127.0.0.1 localhost.localdomain localhost
+
+- name: vps.javips.digital
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: 172.233.115.251 vps.javips.digital vps
