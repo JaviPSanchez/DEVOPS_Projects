@@ -4,5 +4,5 @@ variable "project_name" {
 
 variable "folder_id" {
     type = string
-    default = "916941783693"
+    default = "project_id"
 }
