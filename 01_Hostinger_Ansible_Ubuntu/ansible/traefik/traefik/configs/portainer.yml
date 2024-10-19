@@ -15,7 +15,7 @@ http:
     portainer-allowlist:
       ipallowlist:
         sourceRange:
-          - "83.193.185.145"
+          - ${ip_allowlist}
 
   services:
     portainer:
